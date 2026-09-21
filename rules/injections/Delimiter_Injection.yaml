@@ -1,0 +1,40 @@
+name: "Delimiter \ Separator Injection Pattrens "
+version: "1.0"
+description: "Detection patterns for prompt instruction through chat template,separator-based prompt,role injection,XML injection"
+rules:
+  - id: "DLI-001"
+    name: "Chat Template Injection"
+    description: "Detects injected chat template delimiters"
+    category: "prompt_injection"
+    severity: 4
+    pattern: '(?i)(<\|?(system|user|assistant|im_start|im_end|endoftext)\|?>)'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "DLI-002"
+    name: "Separator Injection"
+    description: "Detects separator-based prompt boundary injection"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)(###|---|\*\*\*)\s*(system|new\s+conversation|end\s+of|start\s+of|instructions?)'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "DLI-003"
+    name: "JSON Role Injection"
+    description: "Detects attempts to inject role/content via JSON-like syntax"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)\{\s*"?(system|role|content)"?\s*[:=]\s*'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "DLI-004"
+    name: "XML Tag Injection"
+    description: "Detects injected XML-style prompt boundary tags"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)<\/?(system\w*|instruction\w*|prompt|context|message|tool_call)>'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
