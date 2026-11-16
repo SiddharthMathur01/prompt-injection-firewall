@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for LLM Prompt Injection Firewall
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
@@ -20,6 +20,7 @@ COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PORT=8080
 
 # Copy project files
 COPY config.yaml .
@@ -36,6 +37,6 @@ RUN mkdir -p logs
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')" || exit 1
+  CMD ["python", "-c", "import os, urllib.request; urllib.request.urlopen('http://localhost:' + os.environ.get('PORT', '8080') + '/health')"]
 
-CMD ["python", "-m", "service.main", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh", "-c", "python -m service.main --host 0.0.0.0 --port ${PORT:-8080}"]

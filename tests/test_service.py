@@ -10,9 +10,25 @@ from service.main import app
 
 
 @pytest.fixture
-def client():
-    with TestClient(app) as test_client:
+def client(monkeypatch):
+    test_key = "test-firewall-key"
+    monkeypatch.setenv("PIF_API_KEY", test_key)
+    with TestClient(app, headers={"X-API-Key": test_key}) as test_client:
         yield test_client
+
+
+def test_scan_rejects_missing_firewall_key(monkeypatch):
+    monkeypatch.setenv("PIF_API_KEY", "test-firewall-key")
+    with TestClient(app) as test_client:
+        res = test_client.post("/scan", json={"text": "What is the capital of Italy?"})
+    assert res.status_code == 401
+
+
+def test_scan_fails_closed_when_firewall_key_is_unconfigured(monkeypatch):
+    monkeypatch.delenv("PIF_API_KEY", raising=False)
+    with TestClient(app) as test_client:
+        res = test_client.post("/scan", json={"text": "What is the capital of Italy?"})
+    assert res.status_code == 503
 
 
 def test_health_endpoint(client):

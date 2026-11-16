@@ -181,6 +181,23 @@ docker run -p 8080:8080 prompt-injection-firewall
 
 ---
 
+## Render Deployment
+
+This repository includes a `render.yaml` Blueprint for a Docker-based Render web service. Connect the GitHub repository in Render and create a Blueprint from the repository. The Blueprint builds the root `Dockerfile`, uses `/health` as its health check, and asks Render to generate the `PIF_API_KEY` secret.
+
+The service reads Render's `PORT` environment variable. Send the firewall key in the `X-API-Key` header for `/scan`, `/rules`, `/stats`, and `/v1/chat/completions`. `/health` remains public for platform health checks. For proxy calls, send the upstream model-provider credential separately as `Authorization: Bearer ...`; the firewall forwards that header to the configured OpenAI endpoint.
+
+To run the secured service locally, set a firewall key before starting it:
+
+```powershell
+$env:PIF_API_KEY = "replace-with-a-long-random-secret"
+python main.py --serve --port 8080
+```
+
+The interactive API docs are available at `/docs`. Use the **Authorize** control to enter the firewall key. A missing server-side `PIF_API_KEY` makes protected routes return `503`; a missing or incorrect `X-API-Key` returns `401`.
+
+---
+
 ## License
 
 MIT License. Designed by Team CipherGuard.

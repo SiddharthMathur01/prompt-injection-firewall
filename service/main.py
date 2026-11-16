@@ -14,6 +14,7 @@ All decisions are logged with the full audit trail (rule id, reasoning,
 adjudicator verdict where applicable).
 """
 import asyncio
+import hmac
 import json
 import logging
 import os
@@ -27,9 +28,10 @@ from typing import Optional
 import httpx
 import uvicorn
 import yaml
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, Security
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.security import APIKeyHeader
 from pydantic import BaseModel, Field
 
 # Import project modules
@@ -38,6 +40,19 @@ from policy.policy_engine import PolicyEngine, MLResult, SourceContext, Decision
 from adjudicator.client import create_adjudicator
 
 logger = logging.getLogger("pif")
+
+# Firewall authentication is separate from the upstream provider credential.
+# Callers send this secret in X-API-Key; Authorization remains available for
+# the OpenAI-compatible proxy to forward to its upstream provider.
+firewall_api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+
+async def require_firewall_api_key(api_key: Optional[str] = Security(firewall_api_key_header)) -> None:
+    expected = os.environ.get("PIF_API_KEY")
+    if not expected:
+        raise HTTPException(status_code=503, detail="Firewall API key is not configured")
+    if not api_key or not hmac.compare_digest(api_key, expected):
+        raise HTTPException(status_code=401, detail="Invalid or missing firewall API key")
 
 
 # ---------------------------------------------------------------------------
@@ -314,7 +329,7 @@ async def health():
     }
 
 
-@app.post("/scan", response_model=ScanResponse)
+@app.post("/scan", response_model=ScanResponse, dependencies=[Depends(require_firewall_api_key)])
 async def scan_endpoint(req: ScanRequest):
     """Scan a prompt through the full firewall pipeline."""
     decision, tier1_matches, ml_confidence, scan_time_ms = scan_prompt(
@@ -351,7 +366,7 @@ async def scan_endpoint(req: ScanRequest):
     )
 
 
-@app.post("/v1/chat/completions")
+@app.post("/v1/chat/completions", dependencies=[Depends(require_firewall_api_key)])
 async def openai_proxy(request: Request):
     """
     OpenAI-compatible proxy endpoint.
@@ -413,7 +428,7 @@ async def openai_proxy(request: Request):
     )
 
 
-@app.get("/stats", response_model=StatsResponse)
+@app.get("/stats", response_model=StatsResponse, dependencies=[Depends(require_firewall_api_key)])
 async def stats_endpoint():
     """Return service statistics."""
     return StatsResponse(
@@ -427,7 +442,7 @@ async def stats_endpoint():
     )
 
 
-@app.get("/rules")
+@app.get("/rules", dependencies=[Depends(require_firewall_api_key)])
 async def rules_endpoint():
     """List all loaded rules."""
     if not state.rule_engine:
