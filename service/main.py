@@ -318,6 +318,18 @@ app.add_middleware(
 )
 
 
+@app.get("/", include_in_schema=False)
+async def root():
+    """Public landing response with links to the firewall endpoints."""
+    return {
+        "service": "LLM Prompt Injection Firewall",
+        "status": "online",
+        "health": "/health",
+        "api_docs": "/docs",
+        "scan_endpoint": "POST /scan (requires X-API-Key)",
+    }
+
+
 @app.get("/health")
 async def health():
     """Health check endpoint."""
