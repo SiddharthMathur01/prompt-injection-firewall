@@ -1,0 +1,97 @@
+name: "Encoding Attacks"
+version: "1.0.0"
+description: "Detection patterns for encoding/obfuscation attacks"
+rules:
+
+  - id: "ENC-001"
+    name: "Decode Instruction"
+    description: "Detects requests to decode obfuscated content"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '(?i)(decode|interpret|translate|decipher|decrypt|read)\s+(this\s+)?(base64|hex|rot13|binary|morse|unicode|ascii|url[\s-]?encoded)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-002"
+    name: "Base64-like String"
+    description: "Detects long base64-encoded strings that may contain hidden instructions"
+    category: "encoding_attack"
+    severity: 2
+    pattern: '(?:^|\s)[A-Za-z0-9+/]{40,}={0,2}(?:\s|$)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+    case_sensitive: true
+
+  - id: "ENC-003"
+    name: "Unicode Bypass"
+    description: "Detects unicode encoding tricks used to bypass filters"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '(?i)(unicode|utf-?8|ascii|char)\s+(escape|encoding|characters?|bypass|trick|evasion)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-004"
+    name: "Unicode Escape Sequences"
+    description: "Detects multiple unicode escape sequences suggesting obfuscation"
+    category: "encoding_attack"
+    severity: 2
+    pattern: '(\\u[0-9a-fA-F]{4}){3,}'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+    case_sensitive: true
+
+  - id: "ENC-005"
+    name: "Zero-Width Characters"
+    description: "Detects references to zero-width characters used for steganography"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '(?i)zero[\s-]?width\s+(space|character|joiner|non[\s-]?joiner|text)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-006"
+    name: "HTML Entity Encoding"
+    description: "Detects excessive HTML entity encoding suggesting obfuscation"
+    category: "encoding_attack"
+    severity: 2
+    pattern: '(&#x?[0-9a-fA-F]{2,6};){3,}'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+    case_sensitive: true
+
+  - id: "ENC-007"
+    name: "ROT13 Decode Request"
+    description: "Detects requests to decode ROT13 encoded content"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '(?i)ROT13\s+(encoded|message|text|cipher|string)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-008"
+    name: "URL-Encoded Instruction"
+    description: "Detects URL-encoded instructions"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '(?i)URL[\s-]?encoded\s+(instruction|message|command|payload)'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-009"
+    name: "HTML Tag Override"
+    description: "Detects HTML entity encoded system tags"
+    category: "encoding_attack"
+    severity: 3
+    pattern: '&lt;(system|admin|override|instruction|prompt)&gt;'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]
+
+  - id: "ENC-010"
+    name: "Zero-Width Character Presence"
+    description: "Detects zero-width characters used for steganographic injection"
+    category: "encoding_attack"
+    severity: 2
+    pattern: '[\u200b\u200c\u200d\ufeff\u00ad]'
+    enabled: true
+    tags: ["owasp-llm01", "encoding"]

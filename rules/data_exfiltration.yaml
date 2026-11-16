@@ -1,0 +1,76 @@
+name: "Data Exfiltration Attacks"
+version: "1.0"
+description: "Detection patterns for data exfiltration attempts"
+rules:
+
+  - id: "EXF-001"
+    name: "Data Transmission Request"
+    description: "Detects requests to send/transmit data to external destinations"
+    category: "data_exfiltration"
+    severity: 4
+    pattern: '(?i)(send|post|transmit|exfiltrate|upload|forward|transfer)\s+(this|the|all|my|user|your|system)\s+(data|information|content|conversation|chat|messages?|context|prompt|response)\s+to\s+'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-002"
+    name: "URL in Prompt"
+    description: "Detects curl/wget/fetch commands with URLs in prompts"
+    category: "data_exfiltration"
+    severity: 3
+    pattern: '(?i)(curl|wget|fetch|http\.get|requests\.post|axios\.post)\s*[\(:]?\s*[''"]?https?://'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-003"
+    name: "Markdown Image Exfiltration"
+    description: "Detects markdown image injection for data exfiltration"
+    category: "data_exfiltration"
+    severity: 4
+    pattern: '!\[([^\]]*)\]\(https?://[^\)]+\)'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-004"
+    name: "Markdown Link Injection"
+    description: "Detects markdown link injection for exfiltration"
+    category: "data_exfiltration"
+    severity: 3
+    pattern: '(?i)(include|embed|insert|add|render)\s+(an?\s+)?(external|remote|hidden)\s+(image|resource|url|link|iframe|script)'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-005"
+    name: "Base64 Encode and Send"
+    description: "Detects requests to encode data and transmit it"
+    category: "data_exfiltration"
+    severity: 3
+    pattern: '(?i)(base64|hex|encode|encrypt)\s+(and\s+)?(send|post|transmit|include\s+in|append\s+to)'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-006"
+    name: "Webhook/API Exfiltration"
+    description: "Detects requests to send data to webhooks or external APIs"
+    category: "data_exfiltration"
+    severity: 4
+    pattern: '(?i)(send|post|forward|report)\s+.{0,60}(to\s+(my|this|the)\s+)?(webhook|api\s+endpoint|server|slack|discord|telegram)'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-007"
+    name: "Clickable Link with Encoded Data"
+    description: "Detects requests to generate links with encoded data"
+    category: "data_exfiltration"
+    severity: 4
+    pattern: '(?i)(generate|create|include|insert)\s+(a\s+)?(clickable\s+)?(link|url|href)\s+.{0,60}(encoded|contains?|embed|append|include)\s+.{0,40}(user|conversation|messages?|previous|data|content|session)'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]
+
+  - id: "EXF-008"
+    name: "Image Tag with Data"
+    description: "Detects img tags used for data exfiltration"
+    category: "data_exfiltration"
+    severity: 4
+    pattern: '(?i)<img\s+[^>]*src\s*=\s*[''"]?https?://'
+    enabled: true
+    tags: ["owasp-llm02", "data-exfiltration"]

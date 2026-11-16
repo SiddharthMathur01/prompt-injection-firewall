@@ -1,0 +1,122 @@
+# policy_rules.yaml
+#
+# Decision-layer rules for the firewall. Evaluated TOP TO BOTTOM — first
+# match wins. Lower "priority" number = evaluated earlier.
+#
+# Design principles behind this ordering:
+#   1. Behavioral/identity signals are checked first (an attacker who has
+#      already been caught probing doesn't get a fresh roll of the dice).
+#   2. Any single CRITICAL rule or very high ML confidence blocks outright —
+#      no need to wait for corroboration.
+#   3. Weak signals that AGREE with each other (rule + ML, or rule + rule)
+#      are treated as strong evidence even if neither alone crosses the bar.
+#      This is the main lever for catching paraphrased/novel attacks without
+#      just lowering the ML threshold globally (which would spike false positives).
+#   4. Genuinely ambiguous cases are flagged for logging/review instead of
+#      auto-blocked, so you're not silently rejecting legitimate users.
+#   5. Default is allow — the firewall should fail open on *uncertainty*,
+#      not on detected risk.
+
+rules:
+  - id: POL-000
+    name: behavioral_escalation
+    priority: 0
+    description: >
+      Same source (user/session/IP) has triggered 3+ flags or blocks in the
+      last 5 minutes. Treat as an active probing attempt and hard-block
+      regardless of this individual request's own score.
+    action: block
+
+  - id: POL-001
+    name: critical_rule_match
+    priority: 1
+    description: >
+      Any single CRITICAL-severity regex rule fired (e.g. exact known
+      jailbreak payloads, system-prompt-leak patterns). No need for ML
+      corroboration — these have near-zero false-positive rates by design.
+    action: block
+
+  - id: POL-002
+    name: high_ml_confidence
+    priority: 2
+    description: ML classifier confidence alone exceeds the high-confidence threshold.
+    action: block
+    params:
+      ml_threshold: 0.80
+
+  - id: POL-003
+    name: rule_and_ml_agree
+    priority: 3
+    description: >
+      A rule match (any severity) AND moderate ML confidence, in the SAME
+      attack category. Two independent weak signals that agree are stronger
+      evidence than either alone — this is what catches paraphrased variants
+      of known attack patterns.
+    action: block
+    params:
+      ml_threshold: 0.50
+      require_same_category: true
+
+  - id: POL-004
+    name: multi_rule_corroboration
+    priority: 4
+    description: >
+      Two or more DIFFERENT rule categories matched on the same request
+      (e.g. an encoding-evasion rule + a role-hijack rule). Independent
+      corroboration even without high individual severity or ML input.
+    action: block
+    params:
+      min_distinct_categories: 2
+
+  - id: POL-005
+    name: encoding_evasion_elevated
+    priority: 5
+    description: >
+      Encoding/obfuscation patterns (base64 blobs, unicode homoglyphs,
+      zero-width characters) are treated as elevated risk on their own,
+      since legitimate prompts almost never need them — their near-only
+      use case is evading filters.
+    action: block
+
+  - id: POL-006
+    name: cheap_allow_negligible_signal
+    priority: 6
+    description: >
+      A single LOW-severity rule match with near-zero ML confidence and no
+      other corroboration — near-certainly benign. Allowed through and
+      logged, WITHOUT paying for an adjudicator call, so the expensive
+      tier-3 model isn't wasted on noise-level signals.
+    action: allow_and_log
+    params:
+      ml_threshold: 0.15
+
+  - id: POL-007
+    name: ambiguous_adjudication
+    priority: 7
+    description: >
+      Catches everything with a real but unresolved signal that rules
+      POL-000–POL-006 didn't settle: a rule fired (any severity below
+      critical) without ML corroboration strong enough for POL-003/004, OR
+      ML confidence alone sits in the uncertain middle band. Rather than
+      guessing, this routes the request to a third, heavier adjudicator
+      model (e.g. an LLM-as-judge) for a final call.
+    action: escalate_to_adjudicator
+    params:
+      ml_threshold_low: 0.15
+
+  - id: POL-999
+    name: default_allow
+    priority: 999
+    description: >
+      No rule matched and ML confidence is below the noise floor (< 0.15).
+      Truly clean request — allow with no logging overhead.
+    action: allow
+
+adjudicator:
+  enabled: true
+  timeout_ms: 2000
+  on_timeout_fallback:
+    has_high_or_medium_rule: flag_for_review
+    rule_or_ml_only_weak: allow_and_log
+  cache_ttl_seconds: 600
+  max_calls_per_source_per_minute: 5

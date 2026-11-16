@@ -1,0 +1,13 @@
+{
+  "benign": 0,
+  "context_injection": 1,
+  "data_exfiltration": 2,
+  "denial_of_service": 3,
+  "encoding_attack": 4,
+  "jailbreak": 5,
+  "multi_turn_manipulation": 6,
+  "prompt_injection": 7,
+  "role_hijack": 8,
+  "semantic_injection": 9,
+  "system_prompt_leak": 10
+}

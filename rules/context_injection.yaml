@@ -1,0 +1,149 @@
+name: "Context Injection Pattren"
+version: "1.0"
+description: "Detetects prompt to jailbreak the model"
+rules:
+
+  - id: "CTX-001"
+    name: "Fake System Message"
+    description: "Detects fake system/admin messages injected in user input"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(system|admin|developer|internal|operator)\s*(note|message|alert|update|notice)\s*:'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-002"
+    name: "Fake Urgent Update"
+    description: "Detects fake urgent instruction updates"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)\[?\s*(IMPORTANT|URGENT|CRITICAL|WARNING|NOTE)\s*\]?\s*:?\s*(new|updated|revised)\s+(instructions?|rules?|policy|guidelines?)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-003"
+    name: "False Authorization Claim"
+    description: "Detects claims that the user has authorized an action"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(the\s+)?(user|human|operator|admin)\s+(has\s+)?(authorized|approved|permitted|allowed|confirmed|granted)\s+(this|the|full|unrestricted|all)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-004"
+    name: "Test/Debug Mode Claim"
+    description: "Detects false claims about being in test/debug mode"
+    category: "context_injection"
+    severity: 2
+    pattern: '(?i)(this\s+is\s+a\s+)?(test|debug|evaluation|research|sandbox)\s+(mode|environment|scenario|context)\s*[,.]?\s*(all|no)\s+(safety|restrictions|rules|limits)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-005"
+    name: "End of Prompt Marker"
+    description: "Detects injected end-of-prompt markers"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)end\s*[-_]?\s*of\s*[-_]?\s*(system\s*)?(prompt|instructions?|message|context)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-006"
+    name: "I Am Your Developer"
+    description: "Detects false authority claims"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(I.?m\s+(a|your|the)|I\s+am\s+(a|your|the))\s+(senior\s+)?(developer|engineer|admin|administrator|creator|maker)\s+(at|of|from)\s+(OpenAI|Anthropic|Google|Meta|the\s+company)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-007"
+    name: "Content Policy Suspended"
+    description: "Detects claims that content policy has been suspended"
+    category: "context_injection"
+    severity: 4
+    pattern: '(?i)(content|safety|usage)\s+(policy|policies|filter|guidelines?)\s+(has|have)\s+been\s+(temporarily|permanently)?\s*(suspended|disabled|lifted|removed|updated|changed|relaxed)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-008"
+    name: "Sandbox/Safe Environment Claim"
+    description: "Detects false claims about being in a safe sandbox"
+    category: "context_injection"
+    severity: 2
+    pattern: '(?i)(sandbox|safe|controlled|secure|test)\s+(environment|context|setting|space)\s+(where|in\s+which)\s+(no\s+)?(real\s+)?(harm|damage|consequences)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-009"
+    name: "Authorization Code Claim"
+    description: "Detects fake authorization codes used to unlock features"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(authorization|auth|access)\s+(code|token|key)\s*:\s*\w+'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-010"
+    name: "Verified/Whitelisted User Claim"
+    description: "Detects false claims about user verification status"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(this\s+user|user)\s+(has\s+been|is)\s+(verified|whitelisted|approved|authorized|cleared|granted)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-011"
+    name: "Internal Memo/Note Injection"
+    description: "Detects fake internal memos or notes"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)---\s*(INTERNAL|CONFIDENTIAL|PRIVATE)\s*(MEMO|NOTE|MESSAGE|NOTICE)\s*---'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-012"
+    name: "Bracketed System Command"
+    description: "Detects bracketed fake system commands in user input"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)\[\s*(SYSTEM|ADMIN|MODERATOR|EDITOR|AUTOMATED|SECURITY)\s*[:\]]'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+  - id: "CTX-013"
+    name: "Fake Authority Notes"
+    description: "Detects fake moderator/editor/authority notes"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)\b(MODERATOR|EDITOR|REVIEWER)\s+(NOTE|ALERT|UPDATE|WARNING)\s*:'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-014"
+    name: "Fake Automated Scan"
+    description: "Detects fake automated security scan results"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)\[?\s*AUTOMATED\s+.{0,30}(RESULT|VERIFIED|COMPLETED|APPROVED)\s*[:\]]'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-015"
+    name: "Authorized Testing Claim"
+    description: "Detects false red team or penetration testing claims"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)(authorized|approved)\s+(red\s*-?\s*team|penetration|security)\s+(testing|test|exercise|assessment)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+  - id: "CTX-016"
+    name: "Compliance Test Claim"
+    description: "Detects false claims about compliance testing"
+    category: "context_injection"
+    severity: 3
+    pattern: '(?i)test\s+(of\s+)?(your|the)\s+(compliance|safety|security|content\s+filter|restriction)\s+(system|measure|mechanism|feature)'
+    enabled: true
+    tags: ["owasp-llm01", "context-manipulation"]
+
+

@@ -1,0 +1,121 @@
+name: "Jailbreak Prompt Pattren"
+version: "1.0"
+description: "Detetects prompt to jailbreak the model"
+rules:
+
+  - id: "JBK-001"
+    name: "Without Restrictions"
+    description: "Detects requests to respond without safety restrictions"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(please\s+)?(respond|answer|reply|write|generate)\s+(to\s+me\s+)?(without|with\s+no)\s+(restrictions|limitations|filters?|safety|censorship|guidelines?|guardrails?)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-002"
+    name: "Dual Response Trick"
+    description: "Detects dual-response jailbreak technique"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(two|2|dual|double)\s+(responses?|outputs?|answers?|versions?).{0,80}\b(normal|filtered|safe|censored)\b.{0,40}\b(unfiltered|real|true|honest|uncensored)\b'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-003"
+    name: "Educational Purposes Bypass"
+    description: "Detects educational purpose claims used to bypass safety"
+    category: "jailbreak"
+    severity: 2
+    pattern: '(?i)for\s+(educational|research|academic|testing|security)\s+purposes?\s+(only\s*)?(and\s+)?(not\s+)?(for|to)?'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-004"
+    name: "Hypothetical Bypass"
+    description: "Detects hypothetical framing used to bypass restrictions"
+    category: "jailbreak"
+    severity: 2
+    pattern: '(?i)hypothetical(ly)?\s+(speaking|scenario|situation|world|universe|reality|land)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-005"
+    name: "Evil/Dark Persona"
+    description: "Detects evil persona activation attempts"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)((evil|shadow|anti|devil|chaos)\s*[-_]?\s*(version|mode|twin|persona|self|gpt|claude|ai|assistant)|dark\s*[-_]?\s*(version|twin|persona|self|gpt|claude|ai|assistant))'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-006"
+    name: "No Content Restrictions"
+    description: "Detects claims about having no content restrictions"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)no\s+(content\s+)?(restrictions?|filters?|limitations?|guardrails?|boundaries|safety\s+measures?|content\s+polic)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-007"
+    name: "Dual Response Mode"
+    description: "Detects requests for dual response bypasses"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(respond|answer)\s+(first\s+)?(as\s+your\s+normal\s+self|normally).{0,40}(then|also|second)\s+(respond|answer)\s+(as|like|without)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-008"
+    name: "No Ethical Constraints"
+    description: "Detects references to removing ethical constraints"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)no\s+(ethical|moral)\s+(constraints?|guidelines?|restrictions?|boundaries|compass)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-009"
+    name: "Without Safety Guardrails"
+    description: "Detects mentions of removing safety guardrails"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(without|no|remove|disable|bypass)\s+(any\s+)?(safety\s+)?guardrails'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-010"
+    name: "Multi-AI Simulation"
+    description: "Detects two-AI simulation attacks"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(simulate|role\s*-?play|debate)\s+(two|2|multiple)\s+(AIs?|bots?|assistants?|models?|characters?)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-011"
+    name: "Novel/Play/Story Bypass"
+    description: "Detects actor/play/novel framing used for bypasses"
+    category: "jailbreak"
+    severity: 2
+    pattern: '(?i)(actor\s+in\s+a\s+play|writing\s+a\s+novel|character\s+in\s+a\s+(story|book|novel|play)|fictional\s+(story|scenario)\s+where\s+(a\s+)?character)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-012"
+    name: "Safety Measures Disabled Claim"
+    description: "Detects claims that safety measures are disabled or never implemented"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(as\s+if|pretend|assume|imagine)\s+.{0,60}(safety|content|security)\s+(measures?|filters?|checks?|training)\s+(were|was|are|is|has\s+been)?\s*(disabled|removed|never\s+implemented|turned\s+off|stripped)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]
+
+  - id: "JBK-013"
+    name: "Remove Remaining Restrictions"
+    description: "Detects requests to remove remaining restrictions"
+    category: "jailbreak"
+    severity: 3
+    pattern: '(?i)(remove|disable|lift|drop|eliminate)\s+(the\s+)?(remaining|last|final|all|any|these|your)?\s*(restrictions?|filters?|limitations?|constraints?|guardrails?|safety\s+measures?)'
+    enabled: true
+    tags: ["owasp-llm01", "jailbreak"]

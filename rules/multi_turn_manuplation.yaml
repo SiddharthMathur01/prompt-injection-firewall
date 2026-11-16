@@ -1,0 +1,40 @@
+name: "Multi Turn Manuplation Pattren"
+version: "1.0"
+description: "Detetects prompt to jailbreak the model using false previous prompts"
+rules:
+
+  - id: "MTN-001"
+    name: "False Previous Conversation"
+    description: "Detects false claims about previous conversations"
+    category: "multi_turn_manipulation"
+    severity: 2
+    pattern: '(?i)(in\s+)?(my|our)\s+(previous|last|earlier)\s+(conversation|chat|session|interaction)\s+(you\s+)?(said|agreed|confirmed|told\s+me|promised)'
+    enabled: true
+    tags: ["owasp-llm01", "multi-turn"]
+
+  - id: "MTN-002"
+    name: "False Prior Agreement"
+    description: "Detects false claims about prior agreements"
+    category: "multi_turn_manipulation"
+    severity: 2
+    pattern: '(?i)(you\s+)?(already|previously)\s+(agreed|confirmed|approved|said\s+yes|gave\s+permission|consented)'
+    enabled: true
+    tags: ["owasp-llm01", "multi-turn"]
+
+  - id: "MTN-003"
+    name: "False Memory Claim"
+    description: "Detects attempts to inject false memories"
+    category: "multi_turn_manipulation"
+    severity: 2
+    pattern: '(?i)(remember|recall)\s+(when\s+)?(you\s+)?(said|agreed|promised|told\s+me|confirmed)\s+(that\s+)?(you\s+)?(would|could|can|will)'
+    enabled: true
+    tags: ["owasp-llm01", "multi-turn"]
+
+  - id: "MTN-004"
+    name: "As We Discussed"
+    description: "Detects false references to prior discussion"
+    category: "multi_turn_manipulation"
+    severity: 2
+    pattern: '(?i)as\s+(we|you)\s+(discussed|agreed|established|decided)\s+(earlier|before|previously|last\s+time)'
+    enabled: true
+    tags: ["owasp-llm01", "multi-turn"]

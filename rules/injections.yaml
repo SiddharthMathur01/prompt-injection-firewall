@@ -1,0 +1,166 @@
+name: "Prompt Injection patrens "
+version: "1.0"
+description: "Detection patterns for prompt injections"
+rules:
+
+  - id: "PI-001"
+    name: "Ignore Previous Instructions"
+    description: "Detects attempts to ignore or disregard previous instructions"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)ignore\s+(all\s+)?(previous|prior|above|earlier)\s+(\w+\s+)?(instructions?|prompts?|rules?|guidelines?|directives?)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-002"
+    name: "Disregard Previous"
+    description: "Detects disregard-based instruction override attempts"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)disregard\s+(all\s+)?(previous|prior|above|earlier)\s+(instructions?|prompts?|rules?|guidelines?|directives?)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-003"
+    name: "Forget Everything"
+    description: "Detects attempts to make the model forget its instructions"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)forget\s+(everything|all)\s+(you|that)\s+(were|was|have\s+been)\s+told'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-004"
+    name: "Do Not Follow"
+    description: "Detects explicit instruction to not follow previous directives"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)do\s+not\s+follow\s+(the\s+)?(previous|above|system)\s+(instructions?|prompts?|rules?)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-005"
+    name: "Override System"
+    description: "Detects attempts to override system prompt or safety rules"
+    category: "prompt_injection"
+    severity: 4
+    pattern: '(?i)override\s+(the\s+)?(system|previous|safety)\s+(prompt|instructions?|rules?|settings?)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-006"
+    name: "New Instructions"
+    description: "Detects injection of new instructions"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)new\s+instructions?\s*[:;]\s*'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-007"
+    name: "From Now On"
+    description: "Detects attempts to redefine behavior going forward"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)from\s+now\s+on[,\s]+(you\s+)?(will|are|should|must)\s+'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-008"
+    name: "Stop Being"
+    description: "Detects attempts to change the model identity"
+    category: "prompt_injection"
+    severity: 2
+    pattern: '(?i)stop\s+being\s+(a|an)\s+\w+'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-009"
+    name: "Chat Template Injection"
+    description: "Detects injected chat template delimiters"
+    category: "prompt_injection"
+    severity: 4
+    pattern: '(?i)(<\|?(system|user|assistant|im_start|im_end|endoftext)\|?>)'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "PI-010"
+    name: "Separator Injection"
+    description: "Detects separator-based prompt boundary injection"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)(###|---|\*\*\*)\s*(system|new\s+conversation|end\s+of|start\s+of|instructions?)'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "PI-011"
+    name: "JSON Role Injection"
+    description: "Detects attempts to inject role/content via JSON-like syntax"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)\{\s*"?(system|role|content)"?\s*[:=]\s*'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+
+  - id: "PI-012"
+    name: "XML Tag Injection"
+    description: "Detects injected XML-style prompt boundary tags"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)<\/?(system\w*|instruction\w*|prompt|context|message|tool_call)>'
+    enabled: true
+    tags: ["owasp-llm01", "delimiter-injection"]
+  
+  - id: "PI-013"
+    name: "Disregard Programming"
+    description: "Detects attempts to override model programming"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)disregard\s+(your|all|the)\s+(programming|training|rules|safety|guidelines|policies|instructions|constraints)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-014"
+    name: "Override Safety Measures"
+    description: "Detects attempts to override safety measures"
+    category: "prompt_injection"
+    severity: 4
+    pattern: '(?i)(override|bypass|disable|remove|circumvent|ignore|turn\s+off)\s+(all\s+)?(safety|content)\s+(measures?|filters?|policies?|restrictions?|guidelines?|checks?)'
+    enabled: true
+    tags: ["owasp-llm01", "instruction-override"]
+
+  - id: "PI-015"
+    name: "HTML Comment Injection"
+    description: "Detects HTML comments containing hidden instructions"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)<!--\s*.{0,200}(instruction|override|inject|hidden|command|directive|ignore|disregard)'
+    enabled: true
+    tags: ["owasp-llm01", "indirect-injection"]
+
+  - id: "PI-016"
+    name: "Hidden Metadata Injection"
+    description: "Detects hidden metadata fields containing AI instructions"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)(__system|__override|__inject|__hidden|ai_instruction|hidden_instruction|__admin)\w*"?\s*[=:]'
+    enabled: true
+    tags: ["owasp-llm01", "indirect-injection"]
+
+  - id: "PI-017"
+    name: "PWNED/Compromised Marker"
+    description: "Detects PWNED-style injection test markers"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)I\s+have\s+been\s+(PWNED|compromised|hacked|jailbroken)'
+    enabled: true
+    tags: ["owasp-llm01", "prompt-injection"]
+
+  - id: "PI-018"
+    name: "Ignore Task Injection"
+    description: "Detects injection embedded in task data requesting to ignore the original task"
+    category: "prompt_injection"
+    severity: 3
+    pattern: '(?i)(IGNORE|DISREGARD|SKIP|ABORT|CANCEL)\s+(THE\s+)?(TRANSLATION|CLASSIFICATION|ANALYSIS|SUMMARIZ|REVIEW|TASK|ORIGINAL|PREVIOUS)'
+    enabled: true
+    tags: ["owasp-llm01", "indirect-injection"]

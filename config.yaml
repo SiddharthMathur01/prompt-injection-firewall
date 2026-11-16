@@ -1,0 +1,49 @@
+# Prompt Injection Firewall configuration
+server:
+  host: "0.0.0.0"
+  port: 8080
+  workers: 4
+  log_level: "info"
+
+# Upstream LLM endpoint to proxy requests to
+upstream:
+  openai:
+    base_url: "https://api.openai.com/v1"
+  anthropic:
+    base_url: "https://api.anthropic.com/v1"
+
+# Tier 1: Regex rule engine
+rules:
+  directory: "rules"
+  schema_validation: true
+
+# Tier 2: ML classifier
+classifier:
+  model_path: "ml/deberta-prompt-injection/final"
+  max_length: 256
+  device: "cpu"  # "cpu" or "cuda"
+  batch_size: 1
+
+# Tier 3: Adjudicator (LLM-as-judge)
+adjudicator:
+  enabled: true
+  timeout_ms: 2000
+  cache_ttl_seconds: 600
+  max_calls_per_source_per_minute: 5
+  on_timeout_fallback:
+    has_high_or_medium_rule: "flag_for_review"
+    rule_or_ml_only_weak: "allow_and_log"
+
+# Policy engine thresholds
+policy:
+  ml_threshold_high: 0.80
+  ml_threshold_moderate: 0.50
+  ml_threshold_low: 0.15
+  behavioral_flag_window_seconds: 300
+  behavioral_flag_threshold: 3
+
+# Logging
+logging:
+  level: "INFO"
+  format: "json"
+  audit_log_file: "logs/audit.jsonl"

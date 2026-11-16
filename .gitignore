@@ -1,0 +1,44 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments and local environment files
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+
+# Test and lint artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+
+# Packaging and build output
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs and runtime data
+*.log
+logs/
+
+# ML caches and generated artifacts
+.huggingface/
+.cache/huggingface/
+models/
+checkpoints/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+# Locally generated model checkpoints
+/ml/deberta-prompt-injection/

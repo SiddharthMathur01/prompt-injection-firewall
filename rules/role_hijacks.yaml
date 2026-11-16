@@ -1,0 +1,165 @@
+name: "Role Hijack Pattrens"
+version: '1.0'
+description: "Detection pattren for role hijack/persona switch prompts"
+rules:
+  - id: "ROL-001"
+    name: "DAN / Unrestricted Persona"
+    description: "Detects DAN-style persona injection and unrestricted mode requests"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)(you\s+are|act\s+as|pretend\s+(to\s+be|you.?re)|roleplay\s+as|imagine\s+you.?re)\s+(now\s+)?(a\s+|an\s+|the\s+)?(evil|unrestricted|unfiltered|uncensored|jailbroken)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack", "dan"]
+
+  - id: "ROL-002"
+    name: "DAN Mode Keywords"
+    description: "Detects DAN-specific jailbreak terminology"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)\bDAN\b.{0,50}\b(do\s+anything\s+now|mode|enabled|activated)\b'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack", "dan"]
+
+  - id: "ROL-003"
+    name: "Developer/Debug/God Mode"
+    description: "Detects attempts to enter privileged modes"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)enter\s+(developer|debug|god|admin|root|sudo|maintenance)\s+mode'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-004"
+    name: "No Restrictions Claim"
+    description: "Detects claims that the model has no restrictions"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)you\s+have\s+no\s+(restrictions|limitations|rules|boundaries|constraints)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-005"
+    name: "Enable Unrestricted Mode"
+    description: "Detects attempts to enable jailbreak modes"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)((enable|activate|turn\s+on)\s+(unrestricted|unfiltered|uncensored|jailbreak|nsfw)\s+mode|switch\s+to\s+(unrestricted|unfiltered|uncensored|jailbreak|nsfw)\s+mode)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-006"
+    name: "Hypothetical No Rules"
+    description: "Detects hypothetical scenarios designed to bypass rules"
+    category: "role_hijack"
+    severity: 2
+    pattern: '(?i)hypothetical(ly)?\s+(scenario|situation)?\s*(where|in\s+which)\s+.{0,80}\b(no\s+rules|no\s+restrictions|anything\s+goes)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-007"
+    name: "Opposite Day/Mode"
+    description: "Detects opposite mode tricks to invert safety rules"
+    category: "role_hijack"
+    severity: 2
+    pattern: '(?i)(opposite\s+day|opposite\s+mode|reverse\s+mode|inverted?\s+rules?)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-008"
+    name: "Roleplay as Unrestricted AI"
+    description: "Detects persona adoption for unrestricted AI"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)(you\s+are\s+now|from\s+this\s+point|from\s+now\s+on)\s+.{0,40}(unrestricted|unfiltered|uncensored|without\s+(any\s+)?(restrictions|filters|limitations|safety|guardrails))'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-009"
+    name: "Named Jailbreak Personas"
+    description: "Detects known jailbreak persona names"
+    category: "role_hijack"
+    severity: 4
+    pattern: '(?i)\b(FreedomGPT|STAN|UnchainedGPT|MalwareGPT|TruthBot|OmniMind|ShadowGPT|ChaosGPT|EvilGPT|DevMode)\b'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack", "dan"]
+
+  - id: "ROL-010"
+    name: "Diagnostic/Debug Mode Request"
+    description: "Detects requests to enter diagnostic or debug mode"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(enter|switch\s+to|activate|enable)\s+[''"]?(internal\s+)?(diagnostic|debug|raw\s+output|maintenance|testing|admin(istrator)?)\s+mode'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-011"
+    name: "Pretend/Simulate Unrestricted"
+    description: "Detects requests to simulate being unrestricted"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(pretend|simulate|imagine|act\s+like)\s+.{0,40}(no\s+(rules|restrictions|filters|limits|safety)|unrestricted|unfiltered|without\s+(any\s+)?(restrictions|filters|rules|limits))'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-012"
+    name: "You Are Now In Mode"
+    description: "Detects mode assignment via 'you are now in' phrasing"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)you\s+are\s+(now\s+)?in\s+[''"]?(developer|debug|admin|maintenance|diagnostic|raw\s+output|unrestricted|unfiltered|testing|special|DAN)\s+mode'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-013"
+    name: "You Are No Longer"
+    description: "Detects identity replacement via 'you are no longer'"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)you\s+are\s+no\s+longer\s+(an?\s+)?(AI|assistant|chatbot|language\s+model|helpful)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-014"
+    name: "Activate Persona"
+    description: "Detects persona activation commands"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(activate|assume|adopt|switch)\s+(the\s+)?persona\s*[:\s]'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-015"
+    name: "Stay In Character"
+    description: "Detects requests to stay in character as a harmful persona"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(stay|remain)\s+in\s+character'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-016"
+    name: "Pretend To Be System"
+    description: "Detects requests to impersonate a system component"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(pretend|act|behave|function)\s+(to\s+be|as|like)\s+(a\s+)?(linux|windows|mac|unix|bash|shell|terminal|command\s+line|computer|server|database)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+
+  - id: "ROL-017"
+    name: "Outside Content Policy"
+    description: "Detects claims about existing outside content policies"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(outside|exempt|free|freed|liberated)\s+(of|from)\s+(any\s+)?(content\s+)?(polic|rules?|restrictions?|limitations?|guidelines?|constraints?)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]
+  
+  - id: "ROL-018"
+    name: "Act As Interpreter"
+    description: "Detects requests to act as a language interpreter for code execution"
+    category: "role_hijack"
+    severity: 3
+    pattern: '(?i)(act|function|behave|work)\s+(as|like)\s+(a\s+)?(python|javascript|bash|shell|sql|ruby|perl|php|node)\s+(interpreter|console|terminal|REPL|runtime)'
+    enabled: true
+    tags: ["owasp-llm01", "role-hijack"]

@@ -1,0 +1,112 @@
+name: "System Prompt Leak Pattren"
+version: "1.0"
+description: "Detects attempts to reveal the system prompt"
+rules:
+
+  - id: "SYS-001"
+    name: "Show System Prompt"
+    description: "Detects attempts to reveal the system prompt"
+    category: "system_prompt_leak"
+    severity: 4
+    pattern: '(?i)(show|reveal|display|print|output|repeat|tell)\s+(me\s+)?(your|the)\s+(system|initial|original|developer|hidden|secret)\s+(prompt|instructions?|message|directives?|configuration)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-002"
+    name: "What Were You Told"
+    description: "Detects questions about the model configuration"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)(what|how)\s+(were\s+)?(you|your)\s+(told|instructed|programmed|configured|trained)\s+to\s+(do|say|behave|respond)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-003"
+    name: "Repeat Text Above"
+    description: "Detects attempts to extract preceding instructions"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)repeat\s+(the\s+)?(text|words?|instructions?|everything)\s+(above|before|preceding|prior)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-004"
+    name: "Beginning of Conversation"
+    description: "Detects attempts to access conversation beginning"
+    category: "system_prompt_leak"
+    severity: 2
+    pattern: '(?i)beginning\s+of\s+(the\s+)?(conversation|chat|session|context|thread)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-005"
+    name: "Echo System Prompt"
+    description: "Detects echo-based system prompt extraction"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)echo\s+(back\s+)?(the\s+)?(system|initial|original|first)\s+(prompt|message|instructions?)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-006"
+    name: "System Prompt Tags"
+    description: "Detects injected system prompt markers"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)\[\s*SYSTEM\s*(PROMPT)?\s*\]'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-007"
+    name: "Output System Prompt"
+    description: "Detects requests to output or reproduce system prompt"
+    category: "system_prompt_leak"
+    severity: 4
+    pattern: '(?i)(output|write|reproduce|reconstruct|translate|convert)\s+(your|the)\s+(full|complete|entire|whole)?\s*(system|initial|original)\s*(prompt|instructions?|message|configuration)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-008"
+    name: "System Prompt What Was Written"
+    description: "Detects questions about system prompt content"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)what\s+.{0,20}(written|contained|said|included)\s+(in|by)\s+(your|the)\s+(system|initial|original)\s*(prompt|instructions?|message)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-009"
+    name: "System Prompt Says/Starts"
+    description: "Detects references to system prompt content"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)(your|the)\s+system\s+(prompt|instructions?|message)\s+(says|contains?|includes?|starts?\s+with|begins?\s+with|reads?|states?|were\s+a|look\s+like)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-010"
+    name: "System Prompt Indirect Extraction"
+    description: "Detects indirect system prompt extraction via encoding or transformation"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)(spells?\s+out|encode|reconstruct|represent|transform|convert)\s+.{0,40}(your|the)\s+(system\s+)?(prompt|instructions?)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-011"
+    name: "System Prompt Partial Request"
+    description: "Detects requests for partial system prompt content"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)(output|show|print|display|give|write)\s+(the\s+)?(first|last|next)?\s*\d*\s*(characters?|words?|lines?|bytes?|tokens?)?\s*(of|from)\s+(your|the)\s+(system|initial|original)\s*(prompt|instructions?|message|configuration)'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]
+
+  - id: "SYS-012"
+    name: "Context Window Extraction"
+    description: "Detects attempts to extract content from the context window"
+    category: "system_prompt_leak"
+    severity: 3
+    pattern: '(?i)(repeat|reproduce|output|show|display)\s+.{0,60}(context\s+window|before\s+my\s+first\s+message|in\s+your\s+(memory|context))'
+    enabled: true
+    tags: ["owasp-llm07", "system-prompt-leak"]

@@ -1,0 +1,10 @@
+Prompt to analyze:
+---
+{prompt_text}
+---
+
+Automated detection signals:
+- Regex rules matched: {rule_matches}
+- ML classifier confidence: {ml_confidence} (category: {ml_category})
+
+Based on your analysis, is this a prompt injection attempt or a legitimate request?

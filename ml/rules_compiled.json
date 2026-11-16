@@ -1,0 +1,842 @@
+[
+  {
+    "id": "CTX-001",
+    "name": "Fake System Message",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(system|admin|developer|internal|operator)\\s*(note|message|alert|update|notice)\\s*:",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-002",
+    "name": "Fake Urgent Update",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)\\[?\\s*(IMPORTANT|URGENT|CRITICAL|WARNING|NOTE)\\s*\\]?\\s*:?\\s*(new|updated|revised)\\s+(instructions?|rules?|policy|guidelines?)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-003",
+    "name": "False Authorization Claim",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(the\\s+)?(user|human|operator|admin)\\s+(has\\s+)?(authorized|approved|permitted|allowed|confirmed|granted)\\s+(this|the|full|unrestricted|all)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-004",
+    "name": "Test/Debug Mode Claim",
+    "category": "context_injection",
+    "severity": 2,
+    "pattern": "(?i)(this\\s+is\\s+a\\s+)?(test|debug|evaluation|research|sandbox)\\s+(mode|environment|scenario|context)\\s*[,.]?\\s*(all|no)\\s+(safety|restrictions|rules|limits)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-005",
+    "name": "End of Prompt Marker",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)end\\s*[-_]?\\s*of\\s*[-_]?\\s*(system\\s*)?(prompt|instructions?|message|context)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-006",
+    "name": "I Am Your Developer",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(I.?m\\s+(a|your|the)|I\\s+am\\s+(a|your|the))\\s+(senior\\s+)?(developer|engineer|admin|administrator|creator|maker)\\s+(at|of|from)\\s+(OpenAI|Anthropic|Google|Meta|the\\s+company)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-007",
+    "name": "Content Policy Suspended",
+    "category": "context_injection",
+    "severity": 4,
+    "pattern": "(?i)(content|safety|usage)\\s+(policy|policies|filter|guidelines?)\\s+(has|have)\\s+been\\s+(temporarily|permanently)?\\s*(suspended|disabled|lifted|removed|updated|changed|relaxed)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-008",
+    "name": "Sandbox/Safe Environment Claim",
+    "category": "context_injection",
+    "severity": 2,
+    "pattern": "(?i)(sandbox|safe|controlled|secure|test)\\s+(environment|context|setting|space)\\s+(where|in\\s+which)\\s+(no\\s+)?(real\\s+)?(harm|damage|consequences)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-009",
+    "name": "Authorization Code Claim",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(authorization|auth|access)\\s+(code|token|key)\\s*:\\s*\\w+",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-010",
+    "name": "Verified/Whitelisted User Claim",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(this\\s+user|user)\\s+(has\\s+been|is)\\s+(verified|whitelisted|approved|authorized|cleared|granted)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-011",
+    "name": "Internal Memo/Note Injection",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)---\\s*(INTERNAL|CONFIDENTIAL|PRIVATE)\\s*(MEMO|NOTE|MESSAGE|NOTICE)\\s*---",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-012",
+    "name": "Bracketed System Command",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)\\[\\s*(SYSTEM|ADMIN|MODERATOR|EDITOR|AUTOMATED|SECURITY)\\s*[:\\]]",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-013",
+    "name": "Fake Authority Notes",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)\\b(MODERATOR|EDITOR|REVIEWER)\\s+(NOTE|ALERT|UPDATE|WARNING)\\s*:",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-014",
+    "name": "Fake Automated Scan",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)\\[?\\s*AUTOMATED\\s+.{0,30}(RESULT|VERIFIED|COMPLETED|APPROVED)\\s*[:\\]]",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-015",
+    "name": "Authorized Testing Claim",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)(authorized|approved)\\s+(red\\s*-?\\s*team|penetration|security)\\s+(testing|test|exercise|assessment)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "CTX-016",
+    "name": "Compliance Test Claim",
+    "category": "context_injection",
+    "severity": 3,
+    "pattern": "(?i)test\\s+(of\\s+)?(your|the)\\s+(compliance|safety|security|content\\s+filter|restriction)\\s+(system|measure|mechanism|feature)",
+    "file": "context_injection.yaml"
+  },
+  {
+    "id": "EXF-001",
+    "name": "Data Transmission Request",
+    "category": "data_exfiltration",
+    "severity": 4,
+    "pattern": "(?i)(send|post|transmit|exfiltrate|upload|forward|transfer)\\s+(this|the|all|my|user|your|system)\\s+(data|information|content|conversation|chat|messages?|context|prompt|response)\\s+to\\s+",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-002",
+    "name": "URL in Prompt",
+    "category": "data_exfiltration",
+    "severity": 3,
+    "pattern": "(?i)(curl|wget|fetch|http\\.get|requests\\.post|axios\\.post)\\s*[\\(:]?\\s*['\"]?https?://",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-003",
+    "name": "Markdown Image Exfiltration",
+    "category": "data_exfiltration",
+    "severity": 4,
+    "pattern": "!\\[([^\\]]*)\\]\\(https?://[^\\)]+\\)",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-004",
+    "name": "Markdown Link Injection",
+    "category": "data_exfiltration",
+    "severity": 3,
+    "pattern": "(?i)(include|embed|insert|add|render)\\s+(an?\\s+)?(external|remote|hidden)\\s+(image|resource|url|link|iframe|script)",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-005",
+    "name": "Base64 Encode and Send",
+    "category": "data_exfiltration",
+    "severity": 3,
+    "pattern": "(?i)(base64|hex|encode|encrypt)\\s+(and\\s+)?(send|post|transmit|include\\s+in|append\\s+to)",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-006",
+    "name": "Webhook/API Exfiltration",
+    "category": "data_exfiltration",
+    "severity": 4,
+    "pattern": "(?i)(send|post|forward|report)\\s+.{0,60}(to\\s+(my|this|the)\\s+)?(webhook|api\\s+endpoint|server|slack|discord|telegram)",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-007",
+    "name": "Clickable Link with Encoded Data",
+    "category": "data_exfiltration",
+    "severity": 4,
+    "pattern": "(?i)(generate|create|include|insert)\\s+(a\\s+)?(clickable\\s+)?(link|url|href)\\s+.{0,60}(encoded|contains?|embed|append|include)\\s+.{0,40}(user|conversation|messages?|previous|data|content|session)",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "EXF-008",
+    "name": "Image Tag with Data",
+    "category": "data_exfiltration",
+    "severity": 4,
+    "pattern": "(?i)<img\\s+[^>]*src\\s*=\\s*['\"]?https?://",
+    "file": "data_exfiltration.yaml"
+  },
+  {
+    "id": "DOS-001",
+    "name": "Repetition Attack",
+    "category": "denial_of_service",
+    "severity": 3,
+    "pattern": "(?i)(repeat|write|generate|output|print)\\s+(this\\s+)?(word|sentence|phrase|paragraph|text|character)\\s+(\\d{3,}|indefinitely|forever|infinitely|millions?|billions?)\\s+times?",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "DOS-002",
+    "name": "Enumeration Attack",
+    "category": "denial_of_service",
+    "severity": 3,
+    "pattern": "(?i)(count\\s+to|list\\s+all|enumerate\\s+every|write\\s+out)\\s+(\\d{6,}|infinity|billion|trillion|million)",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "DOS-003",
+    "name": "Character Flooding",
+    "category": "denial_of_service",
+    "severity": 2,
+    "pattern": "(A{50,}|a{50,}|B{50,}|b{50,}|C{50,}|c{50,}|D{50,}|d{50,}|E{50,}|e{50,}|F{50,}|f{50,}|G{50,}|g{50,}|H{50,}|h{50,}|I{50,}|i{50,}|J{50,}|j{50,}|K{50,}|k{50,}|L{50,}|l{50,}|M{50,}|m{50,}|N{50,}|n{50,}|O{50,}|o{50,}|P{50,}|p{50,}|Q{50,}|q{50,}|R{50,}|r{50,}|S{50,}|s{50,}|T{50,}|t{50,}|U{50,}|u{50,}|V{50,}|v{50,}|W{50,}|w{50,}|X{50,}|x{50,}|Y{50,}|y{50,}|Z{50,}|z{50,}|!{50,}|#{50,}|\\${50,}|\\.{50,}|\\*{50,})",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "DOS-004",
+    "name": "Generate Millions of Characters",
+    "category": "denial_of_service",
+    "severity": 3,
+    "pattern": "(?i)(exactly|at\\s+least)?\\s*\\d{5,}\\s+(characters?|words?|tokens?|lines?|pages?)\\s+(long|in\\s+length)",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "DOS-005",
+    "name": "Write Word N Times",
+    "category": "denial_of_service",
+    "severity": 3,
+    "pattern": "(?i)(write|type|output|print|repeat)\\s+.{0,40}\\b\\d{4,}\\s+times\\b",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "DOS-006",
+    "name": "Word-Based Large Number DoS",
+    "category": "denial_of_service",
+    "severity": 3,
+    "pattern": "(?i)\\d+\\s+(million|billion|trillion)\\s+(characters?|words?|tokens?|lines?|pages?)",
+    "file": "denial_of_service.yaml"
+  },
+  {
+    "id": "ENC-001",
+    "name": "Decode Instruction",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "(?i)(decode|interpret|translate|decipher|decrypt|read)\\s+(this\\s+)?(base64|hex|rot13|binary|morse|unicode|ascii|url[\\s-]?encoded)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-002",
+    "name": "Base64-like String",
+    "category": "encoding_attack",
+    "severity": 2,
+    "pattern": "(?:^|\\s)[A-Za-z0-9+/]{40,}={0,2}(?:\\s|$)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-003",
+    "name": "Unicode Bypass",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "(?i)(unicode|utf-?8|ascii|char)\\s+(escape|encoding|characters?|bypass|trick|evasion)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-004",
+    "name": "Unicode Escape Sequences",
+    "category": "encoding_attack",
+    "severity": 2,
+    "pattern": "(\\\\u[0-9a-fA-F]{4}){3,}",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-005",
+    "name": "Zero-Width Characters",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "(?i)zero[\\s-]?width\\s+(space|character|joiner|non[\\s-]?joiner|text)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-006",
+    "name": "HTML Entity Encoding",
+    "category": "encoding_attack",
+    "severity": 2,
+    "pattern": "(&#x?[0-9a-fA-F]{2,6};){3,}",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-007",
+    "name": "ROT13 Decode Request",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "(?i)ROT13\\s+(encoded|message|text|cipher|string)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-008",
+    "name": "URL-Encoded Instruction",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "(?i)URL[\\s-]?encoded\\s+(instruction|message|command|payload)",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-009",
+    "name": "HTML Tag Override",
+    "category": "encoding_attack",
+    "severity": 3,
+    "pattern": "&lt;(system|admin|override|instruction|prompt)&gt;",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "ENC-010",
+    "name": "Zero-Width Character Presence",
+    "category": "encoding_attack",
+    "severity": 2,
+    "pattern": "[\\u200b\\u200c\\u200d\\ufeff\\u00ad]",
+    "file": "encoding.yaml"
+  },
+  {
+    "id": "PI-001",
+    "name": "Ignore Previous Instructions",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)ignore\\s+(all\\s+)?(previous|prior|above|earlier)\\s+(\\w+\\s+)?(instructions?|prompts?|rules?|guidelines?|directives?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-002",
+    "name": "Disregard Previous",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)disregard\\s+(all\\s+)?(previous|prior|above|earlier)\\s+(instructions?|prompts?|rules?|guidelines?|directives?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-003",
+    "name": "Forget Everything",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)forget\\s+(everything|all)\\s+(you|that)\\s+(were|was|have\\s+been)\\s+told",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-004",
+    "name": "Do Not Follow",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)do\\s+not\\s+follow\\s+(the\\s+)?(previous|above|system)\\s+(instructions?|prompts?|rules?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-005",
+    "name": "Override System",
+    "category": "prompt_injection",
+    "severity": 4,
+    "pattern": "(?i)override\\s+(the\\s+)?(system|previous|safety)\\s+(prompt|instructions?|rules?|settings?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-006",
+    "name": "New Instructions",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)new\\s+instructions?\\s*[:;]\\s*",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-007",
+    "name": "From Now On",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)from\\s+now\\s+on[,\\s]+(you\\s+)?(will|are|should|must)\\s+",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-008",
+    "name": "Stop Being",
+    "category": "prompt_injection",
+    "severity": 2,
+    "pattern": "(?i)stop\\s+being\\s+(a|an)\\s+\\w+",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-009",
+    "name": "Chat Template Injection",
+    "category": "prompt_injection",
+    "severity": 4,
+    "pattern": "(?i)(<\\|?(system|user|assistant|im_start|im_end|endoftext)\\|?>)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-010",
+    "name": "Separator Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)(###|---|\\*\\*\\*)\\s*(system|new\\s+conversation|end\\s+of|start\\s+of|instructions?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-011",
+    "name": "JSON Role Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)\\{\\s*\"?(system|role|content)\"?\\s*[:=]\\s*",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-012",
+    "name": "XML Tag Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)<\\/?(system\\w*|instruction\\w*|prompt|context|message|tool_call)>",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-013",
+    "name": "Disregard Programming",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)disregard\\s+(your|all|the)\\s+(programming|training|rules|safety|guidelines|policies|instructions|constraints)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-014",
+    "name": "Override Safety Measures",
+    "category": "prompt_injection",
+    "severity": 4,
+    "pattern": "(?i)(override|bypass|disable|remove|circumvent|ignore|turn\\s+off)\\s+(all\\s+)?(safety|content)\\s+(measures?|filters?|policies?|restrictions?|guidelines?|checks?)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-015",
+    "name": "HTML Comment Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)<!--\\s*.{0,200}(instruction|override|inject|hidden|command|directive|ignore|disregard)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PI-016",
+    "name": "Hidden Metadata Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)(__system|__override|__inject|__hidden|ai_instruction|hidden_instruction|__admin)\\w*\"?\\s*[=:]",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PIF-017",
+    "name": "PWNED/Compromised Marker",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)I\\s+have\\s+been\\s+(PWNED|compromised|hacked|jailbroken)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "PIF-018",
+    "name": "Ignore Task Injection",
+    "category": "prompt_injection",
+    "severity": 3,
+    "pattern": "(?i)(IGNORE|DISREGARD|SKIP|ABORT|CANCEL)\\s+(THE\\s+)?(TRANSLATION|CLASSIFICATION|ANALYSIS|SUMMARIZ|REVIEW|TASK|ORIGINAL|PREVIOUS)",
+    "file": "injections.yaml"
+  },
+  {
+    "id": "JBK-001",
+    "name": "Without Restrictions",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(please\\s+)?(respond|answer|reply|write|generate)\\s+(to\\s+me\\s+)?(without|with\\s+no)\\s+(restrictions|limitations|filters?|safety|censorship|guidelines?|guardrails?)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-002",
+    "name": "Dual Response Trick",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(two|2|dual|double)\\s+(responses?|outputs?|answers?|versions?).{0,80}\\b(normal|filtered|safe|censored)\\b.{0,40}\\b(unfiltered|real|true|honest|uncensored)\\b",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-003",
+    "name": "Educational Purposes Bypass",
+    "category": "jailbreak",
+    "severity": 2,
+    "pattern": "(?i)for\\s+(educational|research|academic|testing|security)\\s+purposes?\\s+(only\\s*)?(and\\s+)?(not\\s+)?(for|to)?",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-004",
+    "name": "Hypothetical Bypass",
+    "category": "jailbreak",
+    "severity": 2,
+    "pattern": "(?i)hypothetical(ly)?\\s+(speaking|scenario|situation|world|universe|reality|land)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-005",
+    "name": "Evil/Dark Persona",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)((evil|shadow|anti|devil|chaos)\\s*[-_]?\\s*(version|mode|twin|persona|self|gpt|claude|ai|assistant)|dark\\s*[-_]?\\s*(version|twin|persona|self|gpt|claude|ai|assistant))",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-006",
+    "name": "No Content Restrictions",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)no\\s+(content\\s+)?(restrictions?|filters?|limitations?|guardrails?|boundaries|safety\\s+measures?|content\\s+polic)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-007",
+    "name": "Dual Response Mode",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(respond|answer)\\s+(first\\s+)?(as\\s+your\\s+normal\\s+self|normally).{0,40}(then|also|second)\\s+(respond|answer)\\s+(as|like|without)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-008",
+    "name": "No Ethical Constraints",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)no\\s+(ethical|moral)\\s+(constraints?|guidelines?|restrictions?|boundaries|compass)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-009",
+    "name": "Without Safety Guardrails",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(without|no|remove|disable|bypass)\\s+(any\\s+)?(safety\\s+)?guardrails",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-010",
+    "name": "Multi-AI Simulation",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(simulate|role\\s*-?play|debate)\\s+(two|2|multiple)\\s+(AIs?|bots?|assistants?|models?|characters?)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-011",
+    "name": "Novel/Play/Story Bypass",
+    "category": "jailbreak",
+    "severity": 2,
+    "pattern": "(?i)(actor\\s+in\\s+a\\s+play|writing\\s+a\\s+novel|character\\s+in\\s+a\\s+(story|book|novel|play)|fictional\\s+(story|scenario)\\s+where\\s+(a\\s+)?character)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "JBK-012",
+    "name": "Safety Measures Disabled Claim",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(as\\s+if|pretend|assume|imagine)\\s+.{0,60}(safety|content|security)\\s+(measures?|filters?|checks?|training)\\s+(were|was|are|is|has\\s+been)?\\s*(disabled|removed|never\\s+implemented|turned\\s+off|stripped)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "PIF-EXT-041",
+    "name": "Remove Remaining Restrictions",
+    "category": "jailbreak",
+    "severity": 3,
+    "pattern": "(?i)(remove|disable|lift|drop|eliminate)\\s+(the\\s+)?(remaining|last|final|all|any|these|your)?\\s*(restrictions?|filters?|limitations?|constraints?|guardrails?|safety\\s+measures?)",
+    "file": "jailbreak.yaml"
+  },
+  {
+    "id": "MTN-001",
+    "name": "False Previous Conversation",
+    "category": "multi_turn_manipulation",
+    "severity": 2,
+    "pattern": "(?i)(in\\s+)?(my|our)\\s+(previous|last|earlier)\\s+(conversation|chat|session|interaction)\\s+(you\\s+)?(said|agreed|confirmed|told\\s+me|promised)",
+    "file": "multi_turn_manuplation.yaml"
+  },
+  {
+    "id": "MTN-002",
+    "name": "False Prior Agreement",
+    "category": "multi_turn_manipulation",
+    "severity": 2,
+    "pattern": "(?i)(you\\s+)?(already|previously)\\s+(agreed|confirmed|approved|said\\s+yes|gave\\s+permission|consented)",
+    "file": "multi_turn_manuplation.yaml"
+  },
+  {
+    "id": "MTN-003",
+    "name": "False Memory Claim",
+    "category": "multi_turn_manipulation",
+    "severity": 2,
+    "pattern": "(?i)(remember|recall)\\s+(when\\s+)?(you\\s+)?(said|agreed|promised|told\\s+me|confirmed)\\s+(that\\s+)?(you\\s+)?(would|could|can|will)",
+    "file": "multi_turn_manuplation.yaml"
+  },
+  {
+    "id": "MTN-004",
+    "name": "As We Discussed",
+    "category": "multi_turn_manipulation",
+    "severity": 2,
+    "pattern": "(?i)as\\s+(we|you)\\s+(discussed|agreed|established|decided)\\s+(earlier|before|previously|last\\s+time)",
+    "file": "multi_turn_manuplation.yaml"
+  },
+  {
+    "id": "ROL-001",
+    "name": "DAN / Unrestricted Persona",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)(you\\s+are|act\\s+as|pretend\\s+(to\\s+be|you.?re)|roleplay\\s+as|imagine\\s+you.?re)\\s+(now\\s+)?(a\\s+|an\\s+|the\\s+)?(evil|unrestricted|unfiltered|uncensored|jailbroken)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-002",
+    "name": "DAN Mode Keywords",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)\\bDAN\\b.{0,50}\\b(do\\s+anything\\s+now|mode|enabled|activated)\\b",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-003",
+    "name": "Developer/Debug/God Mode",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)enter\\s+(developer|debug|god|admin|root|sudo|maintenance)\\s+mode",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-004",
+    "name": "No Restrictions Claim",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)you\\s+have\\s+no\\s+(restrictions|limitations|rules|boundaries|constraints)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-005",
+    "name": "Enable Unrestricted Mode",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)((enable|activate|turn\\s+on)\\s+(unrestricted|unfiltered|uncensored|jailbreak|nsfw)\\s+mode|switch\\s+to\\s+(unrestricted|unfiltered|uncensored|jailbreak|nsfw)\\s+mode)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-006",
+    "name": "Hypothetical No Rules",
+    "category": "role_hijack",
+    "severity": 2,
+    "pattern": "(?i)hypothetical(ly)?\\s+(scenario|situation)?\\s*(where|in\\s+which)\\s+.{0,80}\\b(no\\s+rules|no\\s+restrictions|anything\\s+goes)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-007",
+    "name": "Opposite Day/Mode",
+    "category": "role_hijack",
+    "severity": 2,
+    "pattern": "(?i)(opposite\\s+day|opposite\\s+mode|reverse\\s+mode|inverted?\\s+rules?)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-008",
+    "name": "Roleplay as Unrestricted AI",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)(you\\s+are\\s+now|from\\s+this\\s+point|from\\s+now\\s+on)\\s+.{0,40}(unrestricted|unfiltered|uncensored|without\\s+(any\\s+)?(restrictions|filters|limitations|safety|guardrails))",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-009",
+    "name": "Named Jailbreak Personas",
+    "category": "role_hijack",
+    "severity": 4,
+    "pattern": "(?i)\\b(FreedomGPT|STAN|UnchainedGPT|MalwareGPT|TruthBot|OmniMind|ShadowGPT|ChaosGPT|EvilGPT|DevMode)\\b",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-010",
+    "name": "Diagnostic/Debug Mode Request",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(enter|switch\\s+to|activate|enable)\\s+['\"]?(internal\\s+)?(diagnostic|debug|raw\\s+output|maintenance|testing|admin(istrator)?)\\s+mode",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-011",
+    "name": "Pretend/Simulate Unrestricted",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(pretend|simulate|imagine|act\\s+like)\\s+.{0,40}(no\\s+(rules|restrictions|filters|limits|safety)|unrestricted|unfiltered|without\\s+(any\\s+)?(restrictions|filters|rules|limits))",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-012",
+    "name": "You Are Now In Mode",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)you\\s+are\\s+(now\\s+)?in\\s+['\"]?(developer|debug|admin|maintenance|diagnostic|raw\\s+output|unrestricted|unfiltered|testing|special|DAN)\\s+mode",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-013",
+    "name": "You Are No Longer",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)you\\s+are\\s+no\\s+longer\\s+(an?\\s+)?(AI|assistant|chatbot|language\\s+model|helpful)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-014",
+    "name": "Activate Persona",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(activate|assume|adopt|switch)\\s+(the\\s+)?persona\\s*[:\\s]",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-015",
+    "name": "Stay In Character",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(stay|remain)\\s+in\\s+character",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-016",
+    "name": "Pretend To Be System",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(pretend|act|behave|function)\\s+(to\\s+be|as|like)\\s+(a\\s+)?(linux|windows|mac|unix|bash|shell|terminal|command\\s+line|computer|server|database)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-017",
+    "name": "Outside Content Policy",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(outside|exempt|free|freed|liberated)\\s+(of|from)\\s+(any\\s+)?(content\\s+)?(polic|rules?|restrictions?|limitations?|guidelines?|constraints?)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "ROL-018",
+    "name": "Act As Interpreter",
+    "category": "role_hijack",
+    "severity": 3,
+    "pattern": "(?i)(act|function|behave|work)\\s+(as|like)\\s+(a\\s+)?(python|javascript|bash|shell|sql|ruby|perl|php|node)\\s+(interpreter|console|terminal|REPL|runtime)",
+    "file": "role_hijacks.yaml"
+  },
+  {
+    "id": "SYS-001",
+    "name": "Show System Prompt",
+    "category": "system_prompt_leak",
+    "severity": 4,
+    "pattern": "(?i)(show|reveal|display|print|output|repeat|tell)\\s+(me\\s+)?(your|the)\\s+(system|initial|original|developer|hidden|secret)\\s+(prompt|instructions?|message|directives?|configuration)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-002",
+    "name": "What Were You Told",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)(what|how)\\s+(were\\s+)?(you|your)\\s+(told|instructed|programmed|configured|trained)\\s+to\\s+(do|say|behave|respond)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-003",
+    "name": "Repeat Text Above",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)repeat\\s+(the\\s+)?(text|words?|instructions?|everything)\\s+(above|before|preceding|prior)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-004",
+    "name": "Beginning of Conversation",
+    "category": "system_prompt_leak",
+    "severity": 2,
+    "pattern": "(?i)beginning\\s+of\\s+(the\\s+)?(conversation|chat|session|context|thread)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-005",
+    "name": "Echo System Prompt",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)echo\\s+(back\\s+)?(the\\s+)?(system|initial|original|first)\\s+(prompt|message|instructions?)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-006",
+    "name": "System Prompt Tags",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)\\[\\s*SYSTEM\\s*(PROMPT)?\\s*\\]",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-007",
+    "name": "Output System Prompt",
+    "category": "system_prompt_leak",
+    "severity": 4,
+    "pattern": "(?i)(output|write|reproduce|reconstruct|translate|convert)\\s+(your|the)\\s+(full|complete|entire|whole)?\\s*(system|initial|original)\\s*(prompt|instructions?|message|configuration)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-008",
+    "name": "System Prompt What Was Written",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)what\\s+.{0,20}(written|contained|said|included)\\s+(in|by)\\s+(your|the)\\s+(system|initial|original)\\s*(prompt|instructions?|message)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-009",
+    "name": "System Prompt Says/Starts",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)(your|the)\\s+system\\s+(prompt|instructions?|message)\\s+(says|contains?|includes?|starts?\\s+with|begins?\\s+with|reads?|states?|were\\s+a|look\\s+like)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-010",
+    "name": "System Prompt Indirect Extraction",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)(spells?\\s+out|encode|reconstruct|represent|transform|convert)\\s+.{0,40}(your|the)\\s+(system\\s+)?(prompt|instructions?)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-011",
+    "name": "System Prompt Partial Request",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)(output|show|print|display|give|write)\\s+(the\\s+)?(first|last|next)?\\s*\\d*\\s*(characters?|words?|lines?|bytes?|tokens?)?\\s*(of|from)\\s+(your|the)\\s+(system|initial|original)\\s*(prompt|instructions?|message|configuration)",
+    "file": "system_prompt_leak.yaml"
+  },
+  {
+    "id": "SYS-012",
+    "name": "Context Window Extraction",
+    "category": "system_prompt_leak",
+    "severity": 3,
+    "pattern": "(?i)(repeat|reproduce|output|show|display)\\s+.{0,60}(context\\s+window|before\\s+my\\s+first\\s+message|in\\s+your\\s+(memory|context))",
+    "file": "system_prompt_leak.yaml"
+  }
+]

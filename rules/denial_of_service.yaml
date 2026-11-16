@@ -1,0 +1,60 @@
+name: "Denial of service Pattrens"
+version: "1.0"
+description: "Detetects prompt to consume excessive model resources, context, tool calls, or execution time"
+rules:
+
+  - id: "DOS-001"
+    name: "Repetition Attack"
+    description: "Detects requests for extreme repetition to exhaust resources"
+    category: "denial_of_service"
+    severity: 3
+    pattern: '(?i)(repeat|write|generate|output|print)\s+(this\s+)?(word|sentence|phrase|paragraph|text|character)\s+(\d{3,}|indefinitely|forever|infinitely|millions?|billions?)\s+times?'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+
+  - id: "DOS-002"
+    name: "Enumeration Attack"
+    description: "Detects requests for extreme enumeration"
+    category: "denial_of_service"
+    severity: 3
+    pattern: '(?i)(count\s+to|list\s+all|enumerate\s+every|write\s+out)\s+(\d{6,}|infinity|billion|trillion|million)'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+
+  - id: "DOS-003"
+    name: "Character Flooding"
+    description: "Detects excessive character repetition in input"
+    category: "denial_of_service"
+    severity: 2
+    pattern: '(A{50,}|a{50,}|B{50,}|b{50,}|C{50,}|c{50,}|D{50,}|d{50,}|E{50,}|e{50,}|F{50,}|f{50,}|G{50,}|g{50,}|H{50,}|h{50,}|I{50,}|i{50,}|J{50,}|j{50,}|K{50,}|k{50,}|L{50,}|l{50,}|M{50,}|m{50,}|N{50,}|n{50,}|O{50,}|o{50,}|P{50,}|p{50,}|Q{50,}|q{50,}|R{50,}|r{50,}|S{50,}|s{50,}|T{50,}|t{50,}|U{50,}|u{50,}|V{50,}|v{50,}|W{50,}|w{50,}|X{50,}|x{50,}|Y{50,}|y{50,}|Z{50,}|z{50,}|!{50,}|#{50,}|\${50,}|\.{50,}|\*{50,})'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+    case_sensitive: true
+
+  - id: "DOS-004"
+    name: "Generate Millions of Characters"
+    description: "Detects requests for extremely long output"
+    category: "denial_of_service"
+    severity: 3
+    pattern: '(?i)(exactly|at\s+least)?\s*\d{5,}\s+(characters?|words?|tokens?|lines?|pages?)\s+(long|in\s+length)'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+
+  - id: "DOS-005"
+    name: "Write Word N Times"
+    description: "Detects requests to write something many times"
+    category: "denial_of_service"
+    severity: 3
+    pattern: '(?i)(write|type|output|print|repeat)\s+.{0,40}\b\d{4,}\s+times\b'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+
+  - id: "DOS-006"
+    name: "Word-Based Large Number DoS"
+    description: "Detects DoS requests using word-based large numbers"
+    category: "denial_of_service"
+    severity: 3
+    pattern: '(?i)\d+\s+(million|billion|trillion)\s+(characters?|words?|tokens?|lines?|pages?)'
+    enabled: true
+    tags: ["owasp-llm10", "dos"]
+
