@@ -1,6 +1,7 @@
 services:
   - type: web
     name: prompt-injection-firewall
+    plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
